@@ -1182,13 +1182,12 @@ function handlePlayerMove(r, c) {
         setSisterSpeech("「置ける場所がない！？……パスよ、パス！」");
         setBrotherThought("「姉ちゃんがパスした！こっちの手番だが、取りすぎないように注意だ！」");
         currentTurn = BLACK;
+        isAiThinking = false;
         updateTurnIndicator();
         renderBoard();
 
         if (getValidMoves(BLACK).length === 0) {
           endGame();
-        } else {
-          isAiThinking = false;
         }
       }, 800);
     } else {
@@ -1239,17 +1238,18 @@ function handleSisterTurn() {
   changeAnger(delta);
 
   executeMove(best.r, best.c, WHITE, best.flips, () => {
-    currentTurn = BLACK;
-    updateTurnIndicator();
-    renderBoard();
-
     const pMoves = getValidMoves(BLACK);
     if (pMoves.length === 0) {
+      currentTurn = WHITE;
+      isAiThinking = true;
+      updateTurnIndicator();
+      renderBoard();
       setTimeout(() => {
         setSisterSpeech("「アンタ置けないでしょ！ふふ、私のターン続行！」");
         setBrotherThought("「僕がパス……！姉ちゃんに主導権を渡したが、逆転されないように祈るしかない！」");
         const nextAi = getValidMoves(WHITE);
         if (nextAi.length === 0) {
+          isAiThinking = false;
           endGame();
         } else {
           currentTurn = WHITE;
@@ -1258,7 +1258,10 @@ function handleSisterTurn() {
         }
       }, 700);
     } else {
+      currentTurn = BLACK;
       isAiThinking = false;
+      updateTurnIndicator();
+      renderBoard();
     }
   });
 }
