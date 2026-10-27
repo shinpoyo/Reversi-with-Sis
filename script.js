@@ -294,7 +294,9 @@ function initGame() {
 
   setSisterSpeech(st.openingSpeech);
   setBrotherThought(st.openingThought);
-  document.getElementById('movePreviewBar').textContent = '💡 光っているマスにカーソルを合わせると「返る枚数と怒り予測」が表示されます';
+  document.getElementById('movePreviewBar').textContent = IS_TOUCH
+    ? '💡 光っているマスを1回タップすると「返る枚数と怒り予測」が出ます。もう1回タップで打ちます'
+    : '💡 光っているマスにカーソルを合わせると「返る枚数と怒り予測」が表示されます';
 }
 
 function resetGame() {
@@ -400,7 +402,23 @@ function isSisterInEndgameCrisis() {
 /* =========================================================
    Rendering & Manga Visuals
    ========================================================= */
+// タッチ端末にはマウスを乗せる操作がないので、1回目のタップで「返る枚数と怒り予測」を出し、
+// 同じマスをもう一度タップしたときに打つ（マウスはこれまでどおり1クリックで打つ）
+const IS_TOUCH = window.matchMedia('(hover: none)').matches;
+let pendingKey = null;
+
+function onCellTap(cell, r, c, flipCount) {
+  if (!IS_TOUCH) { handlePlayerMove(r, c); return; }
+  const key = `${r},${c}`;
+  if (pendingKey === key) { pendingKey = null; handlePlayerMove(r, c); return; }
+  pendingKey = key;
+  document.querySelectorAll('.cell.pending').forEach(el => el.classList.remove('pending'));
+  cell.classList.add('pending');
+  showMovePreview(r, c, flipCount);
+}
+
 function renderBoard() {
+  pendingKey = null;
   const grid = document.getElementById('othelloGrid');
   grid.innerHTML = '';
 
@@ -419,7 +437,7 @@ function renderBoard() {
         const flips = validMap.get(key);
         cell.classList.add('valid-move');
         cell.onmouseenter = () => showMovePreview(r, c, flips.length);
-        cell.onclick = () => handlePlayerMove(r, c);
+        cell.onclick = () => onCellTap(cell, r, c, flips.length);
       }
 
       if (board[r][c] !== EMPTY) {
@@ -937,6 +955,7 @@ function showModal({ shout, isScene, faceKey, balloon, score, desc }) {
   const sceneImg = document.getElementById('modalSceneImg');
   const faceSprite = document.getElementById('modalFaceSprite');
   if (isScene) {
+    if (!sceneImg.getAttribute('src')) sceneImg.src = 'sister_table_flip_scene.webp';
     sceneImg.style.display = 'block';
     faceSprite.style.display = 'none';
   } else {

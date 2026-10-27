@@ -61,6 +61,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
   flex-shrink: 0;
 }
 
@@ -161,7 +163,7 @@ body {
   border-radius: 8px;
   border: var(--border-medium);
   background-color: #ffe0b2;
-  background-image: url('sister_expressions_sheet.jpg');
+  background-image: url('sister_expressions_sheet.webp');
   background-size: 200% 200%;
   background-position: 0% 0%;
   flex-shrink: 0;
@@ -472,6 +474,12 @@ body {
   transition: transform 0.15s;
 }
 
+.cell.pending::after {
+  transform: scale(1.8);
+  background: #ffeb3b;
+  box-shadow: 0 0 6px #ffeb3b;
+}
+
 .cell.valid-move:hover::after,
 .cell.valid-move:active::after {
   transform: scale(1.6);
@@ -727,4 +735,11 @@ body {
   border-color: var(--comic-red);
   transform: translate(-1.5px, -1.5px);
   box-shadow: 4px 4px 0px #000;
+}
+
+/* 幅の狭いスマホ（360px前後）で、ヘッダーを1行に収める */
+@media (max-width: 400px) {
+  .title-text { font-size: 0.8rem; }
+  .stage-select { font-size: 0.66rem; max-width: 7.6em; }
+  .comic-btn-icon { padding: 2px 4px; }
 }
