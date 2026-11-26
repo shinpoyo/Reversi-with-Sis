@@ -730,6 +730,14 @@ body {
   box-shadow: 2.5px 2.5px 0px #aaa;
 }
 
+.modal-more {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #000;
+}
+
 .modal-btn:hover {
   background: var(--comic-red);
   border-color: var(--comic-red);
