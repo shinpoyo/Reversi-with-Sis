@@ -730,6 +730,19 @@ body {
   box-shadow: 2.5px 2.5px 0px #aaa;
 }
 
+.modal-share {
+  display: block;
+  margin: 8px auto 0;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  padding: 5px 16px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+}
+
 .modal-more {
   display: block;
   margin-top: 10px;
