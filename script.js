@@ -969,6 +969,16 @@ function showModal({ shout, isScene, faceKey, balloon, score, desc }) {
   document.getElementById('mangaModal').style.display = 'flex';
 }
 
+// 結果を X に投稿する（遊んだ人の投稿から、次の人に来てもらう）
+function shareResult() {
+  const score = document.getElementById('modalScore').textContent;
+  const stage = document.getElementById('stageSelect');
+  const stageName = stage ? stage.options[stage.selectedIndex].text : '';
+  const text = `ねーちゃんとオセロ ${stageName}\n${score}\n#ねーちゃんとオセロ #ブラウザゲーム`;
+  const url = 'https://shinpoyo.com/Reversi-with-Sis/';
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank', 'noopener');
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   initGame();
 });
